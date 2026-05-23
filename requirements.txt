@@ -1,2 +1,3 @@
+arviz-base
 preliz
 plotly
