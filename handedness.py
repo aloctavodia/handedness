@@ -28,7 +28,7 @@ def plot_distributions(alpha, beta, left_count, right_count, num_people):
     total_count = left_count + right_count
     maximum_likelihood_estimate = 0 if total_count == 0 else left_count / total_count
 
-    x_vals = np.arange(0, num_people+1)
+    x_vals = np.arange(0, num_people-total_count+1)
     posterior_mle = pz.Binomial(num_people - total_count, p=maximum_likelihood_estimate).pdf(x_vals)
     prior_pred = pz.BetaBinomial(alpha, beta, num_people).pdf(x_vals)
     posterior_pred = pz.BetaBinomial(alpha + left_count, beta + right_count, num_people - total_count).pdf(x_vals)
@@ -57,8 +57,7 @@ def plot_distributions(alpha, beta, left_count, right_count, num_people):
     
     if total_count > 0:
         # Predictions given MLE
-        fig.add_trace(go.Bar(x=np.arange(left_count, num_people-total_count+left_count+1), y=posterior_mle,
-                             marker_color=COLOR), row=2, col=2)
+        fig.add_trace(go.Bar(x=x_vals+left_count, y=posterior_mle, marker_color=COLOR), row=2, col=2)
         
         # Posterior Predictive Distribution
         fig.add_trace(go.Bar(x=np.arange(left_count, num_people-total_count+left_count+1), y=posterior_pred,
