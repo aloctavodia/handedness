@@ -28,10 +28,11 @@ def plot_distributions(alpha, beta, left_count, right_count, num_people):
     total_count = left_count + right_count
     maximum_likelihood_estimate = 0 if total_count == 0 else left_count / total_count
 
-    x_vals = np.arange(0, num_people-total_count+1)
-    posterior_mle = pz.Binomial(num_people - total_count, p=maximum_likelihood_estimate).pdf(x_vals)
+    x_vals = np.arange(0, num_people+1)
+    mle_pred = pz.Binomial(num_people - total_count, p=maximum_likelihood_estimate).pdf(x_vals)
     prior_pred = pz.BetaBinomial(alpha, beta, num_people).pdf(x_vals)
     posterior_pred = pz.BetaBinomial(alpha + left_count, beta + right_count, num_people - total_count).pdf(x_vals)
+    print(mle_pred, num_people - total_count, maximum_likelihood_estimate)
 
     fig = make_subplots(rows=2, cols=3, subplot_titles=[
         "<b>Prior</b>", "<b>Likelihood</b>", "<b>Posterior</b>",
@@ -57,7 +58,7 @@ def plot_distributions(alpha, beta, left_count, right_count, num_people):
     
     if total_count > 0:
         # Predictions given MLE
-        fig.add_trace(go.Bar(x=x_vals+left_count, y=posterior_mle, marker_color=COLOR), row=2, col=2)
+        fig.add_trace(go.Bar(x=np.arange(left_count, num_people-total_count+left_count+1), y=mle_pred, marker_color=COLOR), row=2, col=2)
         
         # Posterior Predictive Distribution
         fig.add_trace(go.Bar(x=np.arange(left_count, num_people-total_count+left_count+1), y=posterior_pred,
