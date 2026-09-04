@@ -32,7 +32,6 @@ def plot_distributions(alpha, beta, left_count, right_count, num_people):
     mle_pred = pz.Binomial(num_people - total_count, p=maximum_likelihood_estimate).pdf(x_vals)
     prior_pred = pz.BetaBinomial(alpha, beta, num_people).pdf(x_vals)
     posterior_pred = pz.BetaBinomial(alpha + left_count, beta + right_count, num_people - total_count).pdf(x_vals)
-    print(mle_pred, num_people - total_count, maximum_likelihood_estimate)
 
     fig = make_subplots(rows=2, cols=3, subplot_titles=[
         "<b>Prior</b>", "<b>Likelihood</b>", "<b>Posterior</b>",
